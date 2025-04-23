@@ -4,6 +4,7 @@ import util
 import subprocess
 from PIL import Image, ImageTk
 import cv2
+import datetime
 
 class App:
     def __init__(self):
@@ -24,6 +25,7 @@ class App:
         self.db_dir = './db'
         if not os.path.exists(self.db_dir):
             os.mkdir(self.db_dir)
+        self.log_path = './log.txt'
 
     def add_webcam(self, label):
         if 'cap' not in self.__dict__:
@@ -48,9 +50,17 @@ class App:
         unkown_img_path = './.tmp.jpg'
         cv2.imwrite(unkown_img_path, self.most_recent_capture_arr)
         output= str(subprocess.check_output(['face_recognition', self.db_dir, unkown_img_path]))
-        name=output.split(',')[1][:-3]
+        name=output.split(',')[1][:-3].strip()
+        print(name)
         if name in['unkown_person','no_persons_found']:
-        os.remove(unkown_img_path)
+            util.msg_box('Please register new user or Try agian')
+            
+        else:
+            util.msg_box('Welcome','Welcome {}'.format(name))    
+            with open(self.log_path,'a') as f:
+                f.write('{},{}\n'.format(name,datetime.datetime.now()))
+                f.close()
+        os.remove(unkown_img_path)    
 
     def register_new_user(self):
      # Create a new window for user registration
