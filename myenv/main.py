@@ -52,7 +52,7 @@ class App:
         output= str(subprocess.check_output(['face_recognition', self.db_dir, unkown_img_path]))
         name=output.split(',')[1][:-3].strip()
         print(name)
-        if name in['unkown_person','no_persons_found']:
+        if name in['unknown_person','no_persons_found']:
             util.msg_box('Please register new user or Try agian')
             
         else:
